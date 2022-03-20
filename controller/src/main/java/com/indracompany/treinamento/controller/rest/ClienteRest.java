@@ -1,6 +1,5 @@
 package com.indracompany.treinamento.controller.rest;
 
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +23,20 @@ public class ClienteRest extends GenericCrudRest<Cliente, Long, ClienteService>{
 	@Autowired
 	private ClienteService clienteService;
 	
-	
 	@GetMapping(value = "/buscarPorCpf/{cpf}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody ResponseEntity<List<ClienteDTO>> buscarClientePorCpf(@PathVariable String cpf) {
-		List<ClienteDTO> dto = clienteService.buscarClientePorCpf(cpf);
+	public @ResponseBody ResponseEntity<ClienteDTO> buscarClientePorCpf(@PathVariable String cpf) {
+		ClienteDTO dto = clienteService.buscarClientePorCpf(cpf);
+		
+		if(dto == null) {
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
+		
+		return new ResponseEntity<>(dto, HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/buscarPorCpfList/{cpf}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody ResponseEntity<List<ClienteDTO>> buscarClientePorCpfList(@PathVariable String cpf){
+		List<ClienteDTO> dto = clienteService.buscarClientePorCpfLista(cpf);
 		
 		if (dto == null) {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -36,5 +45,15 @@ public class ClienteRest extends GenericCrudRest<Cliente, Long, ClienteService>{
 		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
 	
+	@GetMapping(value = "/buscarPorNomeList/{nome}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody ResponseEntity<List<ClienteDTO>> buscarClientePorNomeList(@PathVariable String nome){
+		List<ClienteDTO> dto = clienteService.buscarClientePorNome(nome);
+		
+		if(dto == null) {
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
+		
+		return new ResponseEntity<>(dto, HttpStatus.OK);
+	}
 
 }
